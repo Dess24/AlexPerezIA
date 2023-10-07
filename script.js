@@ -1,41 +1,32 @@
 let classifier;
-let imageModelURL = 'Tu_modelo'; // URL del modelo de Teachable Machine
-let video, flippedVideo;
+let imageModelURL = 'https://teachablemachine.withgoogle.com/models/PU64N2Vxd/'; // URL del modelo de Teachable Machine
+let fileInput;
 let label = "";
+let img;
 
 function preload() {
   classifier = ml5.imageClassifier(imageModelURL + 'model.json'); // Carga el modelo antes de que se cargue la página
 }
 
 function setup() {
-  createCanvas(320, 260); // Crea un canvas de 320x260 píxeles
-  video = createCapture(VIDEO); // Captura el video de la cámara
-  video.size(320, 240); // Establece el tamaño del video
-  video.hide(); // Oculta el video original
-  flippedVideo = ml5.flipImage(video); // Invierte el video horizontalmente
-  classifyVideo(); // Clasifica el video
+  fileInput = createFileInput(handleFile); // Crea un input de archivo y llama a la función handleFile cuando se selecciona un archivo
+  createCanvas(480, 360); // Crea un canvas de 480x360 píxeles
 }
 
-function draw() {
-  background(0); // Establece el fondo negro
-  image(flippedVideo, 0, 0); // Muestra el video invertido
-  fill(255); // Establece el color de relleno blanco
-  textSize(16); // Establece el tamaño de la fuente
-  textAlign(CENTER); // Establece la alineación del texto al centro
-  text(label, width / 2, height - 4); // Muestra la etiqueta de la clasificación en la parte inferior del canvas
-  let emoji = { // Objeto que asocia las etiquetas de clasificación con emojis
-    "Class 1": "😊",
-    "Class 2": "🤣",
-    "Class 3": "🖐"
-  }[label];
-  textSize(100); // Establece el tamaño de la fuente
-  text(emoji, width / 2, height / 2); // Muestra el emoji correspondiente a la etiqueta de clasificación en el centro del canvas
+function classifyImage() {
+  classifier.classify(img, gotResult); // Clasifica la imagen y llama a la función gotResult cuando se obtienen los resultados
 }
 
-function classifyVideo() {
-  flippedVideo = ml5.flipImage(video) // Invierte el video horizontalmente
-  classifier.classify(flippedVideo, gotResult); // Clasifica el video y llama a la función gotResult cuando se obtienen los resultados
-  flippedVideo.remove(); // Elimina el video invertido
+function handleFile(file) {
+  if (file.type === 'image') { // Verifica que el archivo sea una imagen
+    img = createImg(file.data, ''); // Crea un elemento de imagen y carga el archivo
+    img.hide(); // Oculta la imagen original
+    // Establece el tamaño de la imagen
+    image(img, 0, 0); // Muestra la imagen en el canvas
+    classifyImage(); // Clasifica la imagen
+  } else {
+    console.log('El archivo seleccionado no es una imagen.');
+  }
 }
 
 function gotResult(error, results) {
@@ -44,5 +35,19 @@ function gotResult(error, results) {
     return;
   }
   label = results[0].label; // Obtiene la etiqueta de clasificación del primer resultado
-  classifyVideo(); // Clasifica el video de nuevo
+
+  textSize(32); // Establece el tamaño de la fuente
+  fill('#FFFFFF'); // Establece el color del texto
+
+  textAlign(CENTER); // Establece la alineación del texto al centro
+  text(label, width / 2, height - 20); // Muestra la etiqueta de la clasificación en la parte inferior del canvas
+  textSize(48); // Establece el tamaño de la fuente
+
+  if (img) {
+    image(img, 0, 0, width, height / 1.2); // Muestra la imagen en la parte superior del canvas
+  }
 }
+
+
+
+

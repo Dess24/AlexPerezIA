@@ -1,0 +1,33 @@
+/* Estilos para el botón "Limpiar" */
+button {
+    background-color: #007bff; /* Color de fondo azul */
+    color: white; /* Color de texto blanco */
+    padding: 10px 20px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    border-radius: 5px; /* Bordes redondeados */
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Color de fondo azul oscuro al pasar por encima */
+  }
+  
+
+  /* Estilos para el canvas de la imagen */
+  canvas {
+    
+    display: block; /* Muestra el canvas como bloque */
+    margin: 0 auto; /* Centra el canvas horizontalmente */
+    border: 4px solid #294d84; /* Borde del canvas */
+    border-radius: 5px; /* Bordes redondeados */
+  }
+  
+  body{
+    background-color: #363636;
+  }
+
+  h1{
+    color: white;
+  }
+  
+  
